@@ -40,7 +40,8 @@
 (straight-use-package 'diminish)
 (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
 (straight-use-package 'company)
-(company-mode 1)
+(require 'company)
+(add-hook 'after-init-hook 'global-company-mode)
 (straight-use-package 'vertico)
 (vertico-mode)
 (with-eval-after-load 'vertico
