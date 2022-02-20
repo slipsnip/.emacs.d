@@ -57,6 +57,7 @@
 (which-key-mode)
 (straight-use-package 'vterm)
 (straight-use-package 'nov)
+(add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
 (with-eval-after-load 'evil
   (require 'general)
   (general-evil-setup))
