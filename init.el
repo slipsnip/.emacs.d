@@ -55,6 +55,18 @@
 (straight-use-package 'consult)
 (straight-use-package 'which-key)
 (which-key-mode)
+(with-eval-after-load 'evil
+  (require 'general)
+  (general-evil-setup))
+(straight-use-package 'evil)
+(require 'evil)
+(evil-mode 1)
+(with-eval-after-load 'evil
+  (setq evil-want-integration t
+	evil-want-keybinding nil
+	evil-want-C-u-scroll t
+	evil-want-C-i-jump nil))
+
 
 (diminish 'which-key-mode)
 (diminish 'company-mode)
@@ -70,17 +82,35 @@
 		term-mode-hook
 		eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
-(global-display-line-numbers-mode 1)
-(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-(global-set-key (kbd "C-s") 'consult-line)
-(global-set-key (kbd "C-;") 'execute-extended-command)
-(global-set-key (kbd "C-x b") 'consult-buffer)
-(define-prefix-command 'toggle)
-(global-set-key (kbd "C-c t") 'toggle)
-(define-key toggle (kbd "l") '("line numbers" . display-line-numbers-mode))
-(define-key toggle (kbd "L") '("global line numbers" . display-line-numbers-mode))
 
-(global-set-key (kbd "C-c C-k") 'copy-line)
+(global-display-line-numbers-mode 1)
+
+(general-define-key
+ :states 'insert
+ "C-g" 'evil-normal-state
+ "C-h" 'evil-delete-backward-char-and-join)
+
+(general-define-key
+ "<escape>" 'keyboard-escape-quit
+ "C-;" 'execute-extended-command
+ "C-x b" 'consult-buffer)
+
+(general-nmap
+ :prefix "SPC"
+ "." 'find-file
+ "f" '(:ignore t :which-key "files")
+ "f s" '(save-buffer :which-key "save"))
+
+(general-create-definer slip-custom-def
+  :prefix "C-c")
+
+(slip-custom-def
+  "t" '(:ignore t :which-key "toggle")
+  "t l" '(display-line-numbers-mode :which-key "line-numbers")
+  "t L" '(global-display-line-numbers-mode :which-key "global-line-numbers")
+  "." 'find-file
+  "C-k" 'copy-line)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
