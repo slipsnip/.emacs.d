@@ -55,6 +55,7 @@
 (straight-use-package 'consult)
 (straight-use-package 'which-key)
 (which-key-mode)
+(straight-use-package 'vterm)
 (with-eval-after-load 'evil
   (require 'general)
   (general-evil-setup))
