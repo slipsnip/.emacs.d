@@ -45,8 +45,8 @@
 (straight-use-package 'vertico)
 (vertico-mode)
 (with-eval-after-load 'vertico
-     (straight-use-package 'marginalia)
-     (marginalia-mode))
+  (straight-use-package 'marginalia)
+  (marginalia-mode))
 (straight-use-package 'orderless)
 (setq completion-styles '(orderless)
       completion-category-defaults nil
@@ -58,6 +58,7 @@
 (straight-use-package 'vterm)
 (straight-use-package 'nov)
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+(straight-use-package 'general)
 (with-eval-after-load 'evil
   (require 'general)
   (general-evil-setup))
