@@ -8,7 +8,7 @@
 
 (defvar bootstrap-version)
 (let ((bootstrap-file
-      (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
       (bootstrap-version 5))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
@@ -20,7 +20,6 @@
   (load bootstrap-file nil 'nomessage))
 
 (setq package-enable-at-startup nil)
-
 (straight-use-package 'doom-themes)
 (setq doom-themes-enable-bold nil
       doom-themes-enable-italic t)
