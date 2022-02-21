@@ -6,6 +6,8 @@
 (menu-bar-mode -1)
 (setq visible-bell t)
 
+;; load slip's stuff
+(add-to-list 'load-path "~/.emacs.d/lisp/")
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
