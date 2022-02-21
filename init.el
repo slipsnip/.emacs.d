@@ -1,4 +1,4 @@
-(setq inhibit-startup-message t)
+ (setq inhibit-startup-message t)
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 (tooltip-mode -1)
@@ -6,6 +6,8 @@
 (menu-bar-mode -1)
 (setq visible-bell t)
 
+;; load slip's stuff
+(add-to-list 'load-path "~/.emacs.d/lisp/")
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -59,28 +61,18 @@
 (straight-use-package 'nov)
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
 (straight-use-package 'general)
-(with-eval-after-load 'evil
-  (require 'general)
-  (general-evil-setup))
-(straight-use-package 'evil)
-(require 'evil)
-(evil-mode 1)
-(with-eval-after-load 'evil
-  (setq evil-want-integration t
-	evil-want-keybinding nil
-	evil-want-C-u-scroll t
-	evil-want-C-i-jump nil))
 
+;; adding basic god mode
+(straight-use-package 'god-mode)
+(with-eval-after-load 'god-mode
+  (require 'god-mode)
+  (require 'slip)
+  (god-mode)
+  (add-to-list 'god-exempt-predicates 'slip-god-mode-active-minibuffer-p)
+  (which-key-enable-god-mode-support))
 
 (diminish 'which-key-mode)
 (diminish 'company-mode)
-
-(defun copy-line (arg)
-  "Copy lines to the kill ring"
-  (interactive "p")
-  (kill-ring-save (line-beginning-position)
-		  (line-beginning-position (+ 1 arg)))
-  (message "%d line%s copied" arg (if (= 1 arg) "" "s")))
 
 (dolist (mode '(org-mode-hook
 		term-mode-hook
@@ -89,31 +81,32 @@
 
 (global-display-line-numbers-mode 1)
 
-(general-define-key
- :states 'insert
- "C-g" 'evil-normal-state
- "C-h" 'evil-delete-backward-char-and-join)
+;; (general-define-key
+;;  :states 'insert
+;;  "C-g" 'evil-normal-state
+;;  "C-h" 'evil-delete-backward-char-and-join)
 
 (general-define-key
- "<escape>" 'keyboard-escape-quit
+ "<escape>" #'god-mode-all
  "C-;" 'execute-extended-command
  "C-x b" 'consult-buffer)
 
-(general-nmap
- :prefix "SPC"
- "." 'find-file
- "f" '(:ignore t :which-key "files")
- "f s" '(save-buffer :which-key "save"))
+;; (general-nmap
+;;  :prefix "SPC"
+;;  "." 'find-file
+;;  "f" '(:ignore t :which-key "files")
+;;  "f s" '(save-buffer :which-key "save"))
 
 (general-create-definer slip-custom-def
   :prefix "C-c")
 
+(require 'slip)
 (slip-custom-def
   "t" '(:ignore t :which-key "toggle")
   "t l" '(display-line-numbers-mode :which-key "line-numbers")
   "t L" '(global-display-line-numbers-mode :which-key "global-line-numbers")
   "." 'find-file
-  "C-k" 'copy-line)
+  "C-k" 'slip-copy-line)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
