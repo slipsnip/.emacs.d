@@ -87,6 +87,7 @@
   (require 'slip)
   (god-mode)
   (add-to-list 'god-exempt-predicates 'slip-god-mode-active-minibuffer-p)
+  (add-hook 'post-command-hook 'slip-god-mode-update-cursor-type)
   (which-key-enable-god-mode-support))
 
 (diminish 'which-key-mode)
@@ -107,7 +108,12 @@
 (general-define-key
  "<escape>" #'god-mode-all
  "C-;" 'execute-extended-command
- "C-x b" 'consult-buffer)
+ "C-x b" 'consult-buffer
+ "C-s" 'consult-line
+ "C-x C-1" 'delete-other-windows
+ "C-x C-2" 'split-window-below
+ "C-x C-3" 'split-window-right
+ "C-x C-0" 'delete-window)
 
 ;; (general-nmap
 ;;  :prefix "SPC"
@@ -125,6 +131,12 @@
   "t L" '(global-display-line-numbers-mode :which-key "global-line-numbers")
   "." 'find-file
   "C-l" 'slip-copy-line)
+(general-define-key
+ :keymaps 'god-local-mode-map
+ "." 'repeat
+ "i" 'god-local-mode
+ "[" 'backward-paragraph
+ "]" 'forward-paragraph)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.

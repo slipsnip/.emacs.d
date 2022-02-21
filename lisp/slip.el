@@ -8,8 +8,6 @@
   (kill-ring-save (line-beginning-position)
 		  (line-beginning-position (+ 1 arg)))
   (message "%d line%s copied" arg (if (= 1 arg) "" "s")))
-  
- (provide 'slip)
 
 (defun slip-org-mode-setup ()
   "Run when in org mode"
@@ -22,3 +20,8 @@
   (global-company-mode)
   (doom-modeline-mode)
   (setq god-global-mode t))
+
+(defun slip-god-mode-update-cursor-type ()
+  (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
+
+(provide 'slip)
