@@ -106,7 +106,7 @@
   "t l" '(display-line-numbers-mode :which-key "line-numbers")
   "t L" '(global-display-line-numbers-mode :which-key "global-line-numbers")
   "." 'find-file
-  "C-k" 'slip-copy-line)
+  "C-l" 'slip-copy-line)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
