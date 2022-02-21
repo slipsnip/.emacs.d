@@ -62,6 +62,23 @@
 (straight-use-package 'nov)
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
 (straight-use-package 'general)
+(straight-use-package 'org-superstar)
+(straight-use-package 'org)
+(with-eval-after-load 'org
+  (require 'org)
+  (require 'slip)
+  (require 'org-tempo)
+  (setq org-startup-indented t
+	org-ellipsis " ⮛"
+	org-pretty-entities
+	prettify-symbols-unprettify-at-point 'right-edge)
+  (setq-default prettify-symbols-alist '(("#+BEGIN_SRC" . "†")
+                                       ("#+END_SRC" . "†")
+                                       ("#+begin_src" . "†")
+                                       ("#+end_src" . "†")
+                                       (">=" . "≥")
+                                       ("=>" . "⇨")))
+  (add-hook 'org-mode-hook 'slip-org-mode-setup))
 
 ;; adding basic god mode
 (straight-use-package 'god-mode)
