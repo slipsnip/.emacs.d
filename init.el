@@ -8,6 +8,9 @@
 
 ;; load slip's stuff
 (add-to-list 'load-path "~/.emacs.d/lisp/")
+(require 'slip)
+(add-hook 'after-init-hook 'slip-after-init)
+
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -37,13 +40,11 @@
 (when (display-graphic-p)
   (require 'all-the-icons))
 (straight-use-package 'doom-modeline)
-(add-hook 'after-init-hook #'doom-modeline-mode)
 (straight-use-package 'magit)
 (straight-use-package 'diminish)
 (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
 (straight-use-package 'company)
 (require 'company)
-(add-hook 'after-init-hook 'global-company-mode)
 (straight-use-package 'vertico)
 (vertico-mode)
 (with-eval-after-load 'vertico

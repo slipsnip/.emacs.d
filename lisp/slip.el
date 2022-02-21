@@ -10,3 +10,8 @@
   (message "%d line%s copied" arg (if (= 1 arg) "" "s")))
   
  (provide 'slip)
+(defun slip-after-init ()
+  "Run after emacs after-init-hook"
+  (global-company-mode)
+  (doom-modeline-mode)
+  (setq god-global-mode t))
