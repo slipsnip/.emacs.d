@@ -100,11 +100,6 @@
 
 (global-display-line-numbers-mode 1)
 
-;; (general-define-key
-;;  :states 'insert
-;;  "C-g" 'evil-normal-state
-;;  "C-h" 'evil-delete-backward-char-and-join)
-
 (general-define-key
  "<escape>" #'god-mode-all
  "C-;" 'execute-extended-command
@@ -115,11 +110,6 @@
  "C-x C-3" 'split-window-right
  "C-x C-0" 'delete-window)
 
-;; (general-nmap
-;;  :prefix "SPC"
-;;  "." 'find-file
-;;  "f" '(:ignore t :which-key "files")
-;;  "f s" '(save-buffer :which-key "save"))
 
 (general-create-definer slip-custom-def
   :prefix "C-c")
