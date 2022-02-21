@@ -130,7 +130,9 @@
   "t l" '(display-line-numbers-mode :which-key "line-numbers")
   "t L" '(global-display-line-numbers-mode :which-key "global-line-numbers")
   "." 'find-file
-  "C-l" 'slip-copy-line)
+  "C-l" 'slip-copy-line
+  "f" '(:ignore t :which-key "file"))
+
 (general-define-key
  :keymaps 'god-local-mode-map
  "." 'repeat
