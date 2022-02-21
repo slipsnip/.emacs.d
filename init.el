@@ -110,6 +110,11 @@
  "C-x C-3" 'split-window-right
  "C-x C-0" 'delete-window)
 
+(general-define-key
+ :keymaps 'isearch-mode-map
+ "M-e" 'consult-isearch
+ "M-s e" 'consult-isearch
+ "M-s l" 'consult-line)
 
 (general-create-definer slip-custom-def
   :prefix "C-c")
