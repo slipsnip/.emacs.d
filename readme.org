@@ -57,6 +57,8 @@ Nicer looking and functioning mode line borrowed from Doom emacs.
 
 #+begin_src emacs-lisp
   (straight-use-package 'doom-modeline)
+  (with-eval-after-load 'doom-modeline
+    (setq doom-modeline-minor-modes t))
 #+end_src
 *** All the Icons
 Beautifully made package used by Doom to provide icons that make things look more modern
