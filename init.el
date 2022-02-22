@@ -33,6 +33,8 @@
 (load-theme 'doom-one t)
 
 (straight-use-package 'doom-modeline)
+(with-eval-after-load 'doom-modeline
+  (setq doom-modeline-minor-modes t))
 
 (straight-use-package 'all-the-icons)
 (when (display-graphic-p)
@@ -150,7 +152,8 @@
 (straight-use-package 'nov)
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
 
-(straight-use-package 'diminish)
+;; (straight-use-package 'diminish)
+(straight-use-package 'delight)
 
 (straight-use-package 'company)
 (require 'company)
@@ -191,8 +194,9 @@
   (global-company-mode)
   (doom-modeline-mode)
   (setq god-global-mode t)
-  (diminish 'which-key-mode)
-  (diminish 'company-mode))
+  (with-eval-after-load 'god-mode
+    (require 'delight)
+    (delight '((god-local-mode " GOD" god-mode)))))
 
 (defun slip-god-mode-update-cursor-type ()
   (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
