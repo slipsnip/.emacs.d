@@ -97,8 +97,6 @@
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
   (add-to-list 'org-structure-template-alist '("py" . "src python")))
 
-
-
 (straight-use-package 'rainbow-delimiters)
 
 (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)

@@ -169,12 +169,6 @@ imitated but never replaced.
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
   (add-to-list 'org-structure-template-alist '("py" . "src python")))
 #+end_src
-**** Org Babel
-Auto tangle configuration when this buffer is saved.
-
-#+begin_src emacs-lisp
-
-#+end_src
 ** Rainbow Delimiters
 Colorize parenthesis to ease in finding matching pairs.
 
