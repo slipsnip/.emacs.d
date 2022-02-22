@@ -1,3 +1,10 @@
+#+TITLE: Slipsnip's emacs configuration
+#+PROPERTY: header-args:emacs-lisp :tangle ./init.el
+
+* Better defaults
+Settings that should be enabled by default
+
+#+begin_src emacs-lisp
 (setq inhibit-startup-message t)
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
@@ -10,7 +17,15 @@
 (set-keyboard-coding-system 'utf-8)
 (setq default-buffer-file-coding-system 'utf-8
       visible-bell t)
+#+end_src
 
+* Packages
+*straight.el* for functional next generation package management
+
+** Straight Use Package bootstrap
+Bootstrap code needed to get *straight.el* up and running
+
+#+begin_src emacs-lisp
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -25,61 +40,99 @@
   (load bootstrap-file nil 'nomessage))
 
 (setq package-enable-at-startup nil)
-
+#+end_src
+** Doom themes
+#+begin_src emacs-lisp
 (straight-use-package 'doom-themes)
 (setq doom-themes-enable-bold nil
       doom-themes-enable-italic t)
 (load-theme 'doom-one t)
-
+#+end_src
+** Password Store
+Use password-store to integrate with Linux's pass command
+#+begin_src emacs-lisp
 (straight-use-package
  '(password-store :type git
 		  :flavor melpa
 		  :files ("contrib/emacs/*.el" "password-store-pkg.el")
 		  :host github
 		  :repo "zx2c4/password-store"))
-
-(straight-use-package 'rainbow-delimiters)
+#+end_src
+** Rainbow Delimiters
+#+begin_src emacs-lisp
+  (straight-use-package 'rainbow-delimiters)
 
 (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
-
-(straight-use-package 'all-the-icons)
+#+end_src
+** All the Icons
+#+begin_src emacs-lisp
+  (straight-use-package 'all-the-icons)
 (when (display-graphic-p)
   (require 'all-the-icons))
-
+#+end_src
+** Doom mode line
+#+begin_src emacs-lisp
 (straight-use-package 'doom-modeline)
-
+#+end_src
+** Magit!
+#+begin_src emacs-lisp
 (straight-use-package 'magit)
-
+#+end_src
+** Diminish
+#+begin_src emacs-lisp
 (straight-use-package 'diminish)
-
+#+end_src
+** Company
+#+begin_src emacs-lisp
 (straight-use-package 'company)
 (require 'company)
-
+#+end_src
+** Vertico
+#+begin_src emacs-lisp
 (straight-use-package 'vertico)
 (vertico-mode)
 (with-eval-after-load 'vertico
   (straight-use-package 'marginalia)
   (marginalia-mode))
-
+#+end_src
+** Orderless
+#+begin_src emacs-lisp
 (straight-use-package 'orderless)
 (setq completion-styles '(orderless)
       completion-category-defaults nil
       completion-category-overrides '((file (styles partial-completion))))
-
+#+end_src
+** Consult
+#+begin_src emacs-lisp
 (straight-use-package 'consult)
-
+#+end_src
+*** Remember Minibuffer history
+helps to continue where left off especialy useful with various consult functions
+#+begin_src emacs-lisp
 (savehist-mode)
-
-(straight-use-package 'which-key)
+#+end_src
+** Which Key
+#+begin_src emacs-lisp
+  (straight-use-package 'which-key)
 (which-key-mode)
-
+#+end_src
+** Vterm
+#+begin_src emacs-lisp
 (straight-use-package 'vterm)
-
+#+end_src
+** Nov.el
+Read *epub* books inside Emacs
+#+begin_src emacs-lisp
 (straight-use-package 'nov)
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
-
+#+end_src
+** General
+#+begin_src emacs-lisp
 (straight-use-package 'general)
-
+#+end_src
+** Org Mode!
+**** Config
+#+begin_src emacs-lisp
 (straight-use-package 'org-superstar)
 (straight-use-package 'org)
 (with-eval-after-load 'org
@@ -108,9 +161,14 @@
   (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
   (add-to-list 'org-structure-template-alist '("py" . "src python")))
+#+end_src
+**** Org Babel
+Auto tangle configuration
+#+begin_src emacs-lisp
 
-
-
+#+end_src
+** God Mode
+#+begin_src emacs-lisp
 (straight-use-package 'god-mode)
 (with-eval-after-load 'god-mode
   (require 'god-mode)
@@ -118,13 +176,18 @@
   (add-to-list 'god-exempt-predicates 'slip-god-mode-active-minibuffer-p)
   (add-hook 'post-command-hook 'slip-god-mode-update-cursor-type)
   (which-key-enable-god-mode-support))
-
-(dolist (mode '(org-mode-hook
-                  term-mode-hook
-                  eshell-mode-hook))
-    (add-hook mode (lambda () (display-line-numbers-mode 0))))
-(global-display-line-numbers-mode 1)
-
+#+end_src
+* Line Numbers
+#+begin_src emacs-lisp
+    (dolist (mode '(org-mode-hook
+                    term-mode-hook
+                    eshell-mode-hook))
+      (add-hook mode (lambda () (display-line-numbers-mode 0))))
+  (global-display-line-numbers-mode 1)
+#+end_src
+* Keybindings
+Use *general.el* to manage keybindings for every package and globaly
+#+begin_src emacs-lisp
 (general-define-key
  "<escape>" #'god-mode-all
  "C-;" 'execute-extended-command
@@ -158,41 +221,46 @@
  "i" 'god-local-mode
  "[" 'backward-paragraph
  "]" 'forward-paragraph)
+#+end_src
+* Slipsnip's Helpful Functions
+#+begin_src emacs-lisp
+  (defun slip-god-mode-active-minibuffer-p ()
+    "Return true if minibuffer is active otherwise nil"
+    (if (active-minibuffer-window) t))
 
-(defun slip-god-mode-active-minibuffer-p ()
-  "Return true if minibuffer is active otherwise nil"
-  (if (active-minibuffer-window) t))
+  (defun slip-copy-line (arg)
+    "Copy lines to the kill ring"
+    (interactive "p")
+    (kill-ring-save (line-beginning-position)
+                    (line-beginning-position (+ 1 arg)))
+    (message "%d line%s copied" arg (if (= 1 arg) "" "s")))
 
-(defun slip-copy-line (arg)
-  "Copy lines to the kill ring"
-  (interactive "p")
-  (kill-ring-save (line-beginning-position)
-                  (line-beginning-position (+ 1 arg)))
-  (message "%d line%s copied" arg (if (= 1 arg) "" "s")))
+  (defun slip-org-babel-tangle-config ()
+    "Automaticaly tangle Config.org when saved"
+    (when (string-equal (buffer-file-name)
+                        (expand-file-name "~/.emacs.d/readme.org"))
+      (let ((org-confirm-babel-evaluate nil))
+        (org-babel-tangle))))
 
-(defun slip-org-babel-tangle-config ()
-  "Automaticaly tangle Config.org when saved"
-  (when (string-equal (buffer-file-name)
-                      (expand-file-name "~/.emacs.d/readme.org"))
-    (let ((org-confirm-babel-evaluate nil))
-      (org-babel-tangle))))
+  (defun slip-org-mode-setup ()
+    "Run when in org mode"
+    (org-indent-mode)
+    (org-superstar-mode 1)
+    (prettify-symbols-mode)
+    (add-hook 'after-save-hook #'slip-org-babel-tangle-config))
 
-(defun slip-org-mode-setup ()
-  "Run when in org mode"
-  (org-indent-mode)
-  (org-superstar-mode 1)
-  (prettify-symbols-mode)
-  (add-hook 'after-save-hook #'slip-org-babel-tangle-config))
+  (defun slip-after-init ()
+    "Run after emacs after-init-hook"
+    (global-company-mode)
+    (doom-modeline-mode)
+    (setq god-global-mode t)
+    (diminish 'which-key-mode)
+    (diminish 'company-mode))
 
-(defun slip-after-init ()
-  "Run after emacs after-init-hook"
-  (global-company-mode)
-  (doom-modeline-mode)
-  (setq god-global-mode t)
-  (diminish 'which-key-mode)
-  (diminish 'company-mode))
-
-(defun slip-god-mode-update-cursor-type ()
-  (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
-
+  (defun slip-god-mode-update-cursor-type ()
+    (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
+#+end_src
+* After Init Hook
+#+begin_src emacs-lisp
 (add-hook 'after-init-hook 'slip-after-init)
+#+end_src
