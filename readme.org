@@ -5,18 +5,18 @@
 Settings that should be enabled by default.
 
 #+begin_src emacs-lisp
-(setq inhibit-startup-message t)
-(scroll-bar-mode -1)
-(tool-bar-mode -1)
-(tooltip-mode -1)
-(set-fringe-mode 10)
-(menu-bar-mode -1)
-(prefer-coding-system       'utf-8)
-(set-default-coding-systems 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(setq default-buffer-file-coding-system 'utf-8
-      visible-bell t)
+  (setq inhibit-startup-message t)
+  (scroll-bar-mode -1)
+  (tool-bar-mode -1)
+  (tooltip-mode -1)
+  (set-fringe-mode 10)
+  (menu-bar-mode -1)
+  (prefer-coding-system       'utf-8)
+  (set-default-coding-systems 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (setq default-buffer-file-coding-system 'utf-8
+        visible-bell t)
 #+end_src
 
 * Packages
@@ -26,36 +26,36 @@ Settings that should be enabled by default.
 Bootstrap code needed to get *straight.el* up and running.
 
 #+begin_src emacs-lisp
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
+  (defvar bootstrap-version)
+  (let ((bootstrap-file
+         (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+        (bootstrap-version 5))
+    (unless (file-exists-p bootstrap-file)
+      (with-current-buffer
+          (url-retrieve-synchronously
+           "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+           'silent 'inhibit-cookies)
+        (goto-char (point-max))
+        (eval-print-last-sexp)))
+    (load bootstrap-file nil 'nomessage))
 
-(setq package-enable-at-startup nil)
+  (setq package-enable-at-startup nil)
 #+end_src
 ** Doom
 *** Themes
 Themes that Doom Emacs comes packaged with that look awesome in all modes.
 
 #+begin_src emacs-lisp
-(straight-use-package 'doom-themes)
-(setq doom-themes-enable-bold nil
-      doom-themes-enable-italic t)
-(load-theme 'doom-one t)
+  (straight-use-package 'doom-themes)
+  (setq doom-themes-enable-bold nil
+        doom-themes-enable-italic t)
+  (load-theme 'doom-one t)
 #+end_src
 *** Doom mode line
 Nicer looking and functioning mode line borrowed from Doom emacs.
 
 #+begin_src emacs-lisp
-(straight-use-package 'doom-modeline)
+  (straight-use-package 'doom-modeline)
 #+end_src
 *** All the Icons
 Beautifully made package used by Doom to provide icons that make things look more modern
@@ -66,7 +66,7 @@ Beautifully made package used by Doom to provide icons that make things look mor
     (require 'all-the-icons)
     (with-eval-after-load 'all-the-icons
       (straight-use-package 'all-the-icons-dired))
-  )
+    )
 #+end_src
 ** God Mode
 Removes RSI injury providing easy access to M-x C-x and key-chords,
@@ -75,24 +75,24 @@ configuration as I did not want Evil mode.  Can be used in conjunction
 with Evil.
 
 #+begin_src emacs-lisp
-(straight-use-package 'god-mode)
-(with-eval-after-load 'god-mode
-  (require 'god-mode)
-  (god-mode)
-  (add-to-list 'god-exempt-predicates 'slip-god-mode-active-minibuffer-p)
-  (add-hook 'post-command-hook 'slip-god-mode-update-cursor-type)
-  (which-key-enable-god-mode-support))
+  (straight-use-package 'god-mode)
+  (with-eval-after-load 'god-mode
+    (require 'god-mode)
+    (god-mode)
+    (add-to-list 'god-exempt-predicates 'slip-god-mode-active-minibuffer-p)
+    (add-hook 'post-command-hook 'slip-god-mode-update-cursor-type)
+    (which-key-enable-god-mode-support))
 #+end_src
 ** Vertico
 Vertical Interactive Completion UI that is minimalist and strives to
 retain full compatibility with emacs builtins.
 
 #+begin_src emacs-lisp
-(straight-use-package 'vertico)
-(vertico-mode)
-(with-eval-after-load 'vertico
-  (straight-use-package 'marginalia)
-  (marginalia-mode))
+  (straight-use-package 'vertico)
+  (vertico-mode)
+  (with-eval-after-load 'vertico
+    (straight-use-package 'marginalia)
+    (marginalia-mode))
 #+end_src
 
 **** Complementary packages
@@ -103,23 +103,23 @@ enrich the completion UI.
 Advanced completion style that matches candidates in any order
 
 #+begin_src emacs-lisp
-(straight-use-package 'orderless)
-(setq completion-styles '(orderless)
-      completion-category-defaults nil
-      completion-category-overrides '((file (styles partial-completion))))
+  (straight-use-package 'orderless)
+  (setq completion-styles '(orderless)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion))))
 #+end_src
 ***** Consult
 Consult provides practical commands based on the Emacs completion function *completing-read*.
 
 #+begin_src emacs-lisp
-(straight-use-package 'consult)
+  (straight-use-package 'consult)
 #+end_src
 
 Helps to continue where left off especially useful with various consult
 functions
 
 #+begin_src emacs-lisp
-(savehist-mode)
+  (savehist-mode)
 #+end_src
 ** Which Key
 The very helpful which key verbosely reminding you of keybindings
@@ -127,47 +127,47 @@ improving Emacs discover-ability.
 
 #+begin_src emacs-lisp
   (straight-use-package 'which-key)
-(which-key-mode)
+  (which-key-mode)
 #+end_src
 ** Magit!
 The *git porcelain* for emacs that is the undisputed champion.
 
 #+begin_src emacs-lisp
-(straight-use-package 'magit)
+  (straight-use-package 'magit)
 #+end_src
 ** Org Mode!
 The infamous Org mode for getting your organization on and more! Often
 imitated but never replaced.
 
 #+begin_src emacs-lisp
-(straight-use-package 'org-superstar)
-(straight-use-package 'org)
-(with-eval-after-load 'org
-  (require 'org)
-  (require 'org-tempo)
-  (setq org-startup-indented t
-	org-ellipsis " ⮛"
-	org-pretty-entities t
-	prettify-symbols-unprettify-at-point 'right-edge
-	org-agenda-files '("~/org/agenda.org")
-	org-agenda-start-with-log-mode t
-	org-log-done 'time)
-  (setq-default prettify-symbols-alist '(("#+BEGIN_SRC" . "†")
-                                       ("#+END_SRC" . "†")
-                                       ("#+begin_src" . "†")
-                                       ("#+end_src" . "†")
-                                       (">=" . "≥")
-                                       ("=>" . "⇨")))
-  (setq org-confirm-babel-evaluate nil)
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((emacs-lisp . t)
-     (python . t)
-     (shell . t)))
-  (add-hook 'org-mode-hook 'slip-org-mode-setup)
-  (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
-  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-  (add-to-list 'org-structure-template-alist '("py" . "src python")))
+  (straight-use-package 'org-superstar)
+  (straight-use-package 'org)
+  (with-eval-after-load 'org
+    (require 'org)
+    (require 'org-tempo)
+    (setq org-startup-indented t
+          org-ellipsis " ⮛"
+          org-pretty-entities t
+          prettify-symbols-unprettify-at-point 'right-edge
+          org-agenda-files '("~/org/agenda.org")
+          org-agenda-start-with-log-mode t
+          org-log-done 'time)
+    (setq-default prettify-symbols-alist '(("#+BEGIN_SRC" . "†")
+                                           ("#+END_SRC" . "†")
+                                           ("#+begin_src" . "†")
+                                           ("#+end_src" . "†")
+                                           (">=" . "≥")
+                                           ("=>" . "⇨")))
+    (setq org-confirm-babel-evaluate nil)
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((emacs-lisp . t)
+       (python . t)
+       (shell . t)))
+    (add-hook 'org-mode-hook 'slip-org-mode-setup)
+    (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+    (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+    (add-to-list 'org-structure-template-alist '("py" . "src python")))
 #+end_src
 ** Rainbow Delimiters
 Colorize parenthesis to ease in finding matching pairs.
@@ -175,99 +175,99 @@ Colorize parenthesis to ease in finding matching pairs.
 #+begin_src emacs-lisp
   (straight-use-package 'rainbow-delimiters)
 
-(add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
 #+end_src
 ** General
 Keybinding framework to ease use of Emacs builtins for handing
 keybindings making for better syntax and togetherness.
 
 #+begin_src emacs-lisp
-(straight-use-package 'general)
+  (straight-use-package 'general)
 #+end_src
 *** Keybindings
 Use *general.el* to manage keybindings all in one convenient location.
 
 #+begin_src emacs-lisp
-(general-define-key
- "<escape>" #'god-mode-all
- "C-;" 'execute-extended-command
- "C-x b" 'consult-buffer
- "C-s" 'consult-line
- "C-x C-1" 'delete-other-windows
- "C-x C-2" 'split-window-below
- "C-x C-3" 'split-window-right
- "C-x C-0" 'delete-window)
+  (general-define-key
+   "<escape>" #'god-mode-all
+   "C-;" 'execute-extended-command
+   "C-x b" 'consult-buffer
+   "C-s" 'consult-line
+   "C-x C-1" 'delete-other-windows
+   "C-x C-2" 'split-window-below
+   "C-x C-3" 'split-window-right
+   "C-x C-0" 'delete-window)
 
-(general-define-key
- :keymaps 'isearch-mode-map
- "M-e" 'consult-isearch
- "M-s e" 'consult-isearch
- "M-s l" 'consult-line)
+  (general-define-key
+   :keymaps 'isearch-mode-map
+   "M-e" 'consult-isearch
+   "M-s e" 'consult-isearch
+   "M-s l" 'consult-line)
 
-(general-create-definer slip-custom-def
-  :prefix "C-c")
+  (general-create-definer slip-custom-def
+    :prefix "C-c")
 
-(slip-custom-def
-  "t" '(:ignore t :which-key "toggle")
-  "t l" '(display-line-numbers-mode :which-key "line-numbers")
-  "t L" '(global-display-line-numbers-mode :which-key "global-line-numbers")
-  "." 'find-file
-  "C-l" 'slip-copy-line
-  "f" '(:ignore t :which-key "file"))
+  (slip-custom-def
+    "t" '(:ignore t :which-key "toggle")
+    "t l" '(display-line-numbers-mode :which-key "line-numbers")
+    "t L" '(global-display-line-numbers-mode :which-key "global-line-numbers")
+    "." 'find-file
+    "C-l" 'slip-copy-line
+    "f" '(:ignore t :which-key "file"))
 
-(general-define-key
- :keymaps 'god-local-mode-map
- "." 'repeat
- "i" 'god-local-mode
- "[" 'backward-paragraph
- "]" 'forward-paragraph)
+  (general-define-key
+   :keymaps 'god-local-mode-map
+   "." 'repeat
+   "i" 'god-local-mode
+   "[" 'backward-paragraph
+   "]" 'forward-paragraph)
 #+end_src
 ** Vterm
 The best terminal emulation in Emacs that is fully functional and
 compatible with interactive Linux commands.
 
 #+begin_src emacs-lisp
-(straight-use-package 'vterm)
+  (straight-use-package 'vterm)
 #+end_src
 ** Password Store
 Use password-store to integrate with Linux's pass command.
 
 #+begin_src emacs-lisp
-(straight-use-package
- '(password-store :type git
-		  :flavor melpa
-		  :files ("contrib/emacs/*.el" "password-store-pkg.el")
-		  :host github
-		  :repo "zx2c4/password-store"))
+  (straight-use-package
+   '(password-store :type git
+                    :flavor melpa
+                    :files ("contrib/emacs/*.el" "password-store-pkg.el")
+                    :host github
+                    :repo "zx2c4/password-store"))
 #+end_src
 ** Nov.el
 Read *epub* books inside Emacs.
 
 #+begin_src emacs-lisp
-(straight-use-package 'nov)
-(add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+  (straight-use-package 'nov)
+  (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
 #+end_src
 ** Diminish
 Permits hiding modes from your modeline for less visual distraction.
 
 #+begin_src emacs-lisp
-(straight-use-package 'diminish)
+  (straight-use-package 'diminish)
 #+end_src
 ** Company
 Code completion framework for Emacs.
 
 #+begin_src emacs-lisp
-(straight-use-package 'company)
-(require 'company)
+  (straight-use-package 'company)
+  (require 'company)
 #+end_src
 * Line Numbers
 What programmer does not appreciate line numbers?
 
 #+begin_src emacs-lisp
-    (dolist (mode '(org-mode-hook
-                    term-mode-hook
-                    eshell-mode-hook))
-      (add-hook mode (lambda () (display-line-numbers-mode 0))))
+  (dolist (mode '(org-mode-hook
+                  term-mode-hook
+                  eshell-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0))))
   (global-display-line-numbers-mode 1)
 #+end_src
 * Slipsnip's Helpful Functions
@@ -310,5 +310,5 @@ What programmer does not appreciate line numbers?
 #+end_src
 * After Init Hook
 #+begin_src emacs-lisp
-(add-hook 'after-init-hook 'slip-after-init)
+  (add-hook 'after-init-hook 'slip-after-init)
 #+end_src

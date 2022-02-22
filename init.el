@@ -38,7 +38,7 @@
   (require 'all-the-icons)
   (with-eval-after-load 'all-the-icons
     (straight-use-package 'all-the-icons-dired))
-)
+  )
 
 (straight-use-package 'god-mode)
 (with-eval-after-load 'god-mode
@@ -74,18 +74,18 @@
   (require 'org)
   (require 'org-tempo)
   (setq org-startup-indented t
-	org-ellipsis " ⮛"
-	org-pretty-entities t
-	prettify-symbols-unprettify-at-point 'right-edge
-	org-agenda-files '("~/org/agenda.org")
-	org-agenda-start-with-log-mode t
-	org-log-done 'time)
+        org-ellipsis " ⮛"
+        org-pretty-entities t
+        prettify-symbols-unprettify-at-point 'right-edge
+        org-agenda-files '("~/org/agenda.org")
+        org-agenda-start-with-log-mode t
+        org-log-done 'time)
   (setq-default prettify-symbols-alist '(("#+BEGIN_SRC" . "†")
-                                       ("#+END_SRC" . "†")
-                                       ("#+begin_src" . "†")
-                                       ("#+end_src" . "†")
-                                       (">=" . "≥")
-                                       ("=>" . "⇨")))
+                                         ("#+END_SRC" . "†")
+                                         ("#+begin_src" . "†")
+                                         ("#+end_src" . "†")
+                                         (">=" . "≥")
+                                         ("=>" . "⇨")))
   (setq org-confirm-babel-evaluate nil)
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -141,10 +141,10 @@
 
 (straight-use-package
  '(password-store :type git
-		  :flavor melpa
-		  :files ("contrib/emacs/*.el" "password-store-pkg.el")
-		  :host github
-		  :repo "zx2c4/password-store"))
+                  :flavor melpa
+                  :files ("contrib/emacs/*.el" "password-store-pkg.el")
+                  :host github
+                  :repo "zx2c4/password-store"))
 
 (straight-use-package 'nov)
 (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
@@ -155,9 +155,9 @@
 (require 'company)
 
 (dolist (mode '(org-mode-hook
-                  term-mode-hook
-                  eshell-mode-hook))
-    (add-hook mode (lambda () (display-line-numbers-mode 0))))
+                term-mode-hook
+                eshell-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
 (global-display-line-numbers-mode 1)
 
 (defun slip-god-mode-active-minibuffer-p ()
