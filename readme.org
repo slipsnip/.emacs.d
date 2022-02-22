@@ -2,7 +2,7 @@
 #+PROPERTY: header-args:emacs-lisp :tangle ./init.el
 
 * Better defaults
-Settings that should be enabled by default
+Settings that should be enabled by default.
 
 #+begin_src emacs-lisp
 (setq inhibit-startup-message t)
@@ -20,10 +20,10 @@ Settings that should be enabled by default
 #+end_src
 
 * Packages
-*straight.el* for functional next generation package management
+*straight.el* for functional next generation package management.
 
 ** Straight Use Package bootstrap
-Bootstrap code needed to get *straight.el* up and running
+Bootstrap code needed to get *straight.el* up and running.
 
 #+begin_src emacs-lisp
 (defvar bootstrap-version)
@@ -41,53 +41,52 @@ Bootstrap code needed to get *straight.el* up and running
 
 (setq package-enable-at-startup nil)
 #+end_src
-** Doom themes
+** Doom
+*** Themes
+Themes that Doom Emacs comes packaged with that look awesome in all modes.
+
 #+begin_src emacs-lisp
 (straight-use-package 'doom-themes)
 (setq doom-themes-enable-bold nil
       doom-themes-enable-italic t)
 (load-theme 'doom-one t)
 #+end_src
-** Password Store
-Use password-store to integrate with Linux's pass command
-#+begin_src emacs-lisp
-(straight-use-package
- '(password-store :type git
-		  :flavor melpa
-		  :files ("contrib/emacs/*.el" "password-store-pkg.el")
-		  :host github
-		  :repo "zx2c4/password-store"))
-#+end_src
-** Rainbow Delimiters
-#+begin_src emacs-lisp
-  (straight-use-package 'rainbow-delimiters)
+*** Doom mode line
+Nicer looking and functioning mode line borrowed from Doom emacs.
 
-(add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
-#+end_src
-** All the Icons
-#+begin_src emacs-lisp
-  (straight-use-package 'all-the-icons)
-(when (display-graphic-p)
-  (require 'all-the-icons))
-#+end_src
-** Doom mode line
 #+begin_src emacs-lisp
 (straight-use-package 'doom-modeline)
 #+end_src
-** Magit!
+*** All the Icons
+Beautifully made package used by Doom to provide icons that make things look more modern
+
 #+begin_src emacs-lisp
-(straight-use-package 'magit)
+  (straight-use-package 'all-the-icons)
+  (when (display-graphic-p)
+    (require 'all-the-icons)
+    (with-eval-after-load 'all-the-icons
+      (straight-use-package 'all-the-icons-dired))
+  )
 #+end_src
-** Diminish
+** God Mode
+Removes RSI injury providing easy access to M-x C-x and key-chords,
+leave no pinkie behind!  This is a core ingredient to the slipsnip
+configuration as I did not want Evil mode.  Can be used in conjunction
+with Evil.
+
 #+begin_src emacs-lisp
-(straight-use-package 'diminish)
-#+end_src
-** Company
-#+begin_src emacs-lisp
-(straight-use-package 'company)
-(require 'company)
+(straight-use-package 'god-mode)
+(with-eval-after-load 'god-mode
+  (require 'god-mode)
+  (god-mode)
+  (add-to-list 'god-exempt-predicates 'slip-god-mode-active-minibuffer-p)
+  (add-hook 'post-command-hook 'slip-god-mode-update-cursor-type)
+  (which-key-enable-god-mode-support))
 #+end_src
 ** Vertico
+Vertical Interactive Completion UI that is minimalist and strives to
+retain full compatibility with emacs builtins.
+
 #+begin_src emacs-lisp
 (straight-use-package 'vertico)
 (vertico-mode)
@@ -95,43 +94,51 @@ Use password-store to integrate with Linux's pass command
   (straight-use-package 'marginalia)
   (marginalia-mode))
 #+end_src
-** Orderless
+
+**** Complementary packages
+Set of curated complementary packages that work well with *Vertico* to
+enrich the completion UI.
+
+***** Orderless
+Advanced completion style that matches candidates in any order
+
 #+begin_src emacs-lisp
 (straight-use-package 'orderless)
 (setq completion-styles '(orderless)
       completion-category-defaults nil
       completion-category-overrides '((file (styles partial-completion))))
 #+end_src
-** Consult
+***** Consult
+Consult provides practical commands based on the Emacs completion function *completing-read*.
+
 #+begin_src emacs-lisp
 (straight-use-package 'consult)
 #+end_src
-*** Remember Minibuffer history
-helps to continue where left off especialy useful with various consult functions
+
+Helps to continue where left off especially useful with various consult
+functions
+
 #+begin_src emacs-lisp
 (savehist-mode)
 #+end_src
 ** Which Key
+The very helpful which key verbosely reminding you of keybindings
+improving Emacs discover-ability.
+
 #+begin_src emacs-lisp
   (straight-use-package 'which-key)
 (which-key-mode)
 #+end_src
-** Vterm
+** Magit!
+The *git porcelain* for emacs that is the undisputed champion.
+
 #+begin_src emacs-lisp
-(straight-use-package 'vterm)
-#+end_src
-** Nov.el
-Read *epub* books inside Emacs
-#+begin_src emacs-lisp
-(straight-use-package 'nov)
-(add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
-#+end_src
-** General
-#+begin_src emacs-lisp
-(straight-use-package 'general)
+(straight-use-package 'magit)
 #+end_src
 ** Org Mode!
-**** Config
+The infamous Org mode for getting your organization on and more! Often
+imitated but never replaced.
+
 #+begin_src emacs-lisp
 (straight-use-package 'org-superstar)
 (straight-use-package 'org)
@@ -163,30 +170,29 @@ Read *epub* books inside Emacs
   (add-to-list 'org-structure-template-alist '("py" . "src python")))
 #+end_src
 **** Org Babel
-Auto tangle configuration
+Auto tangle configuration when this buffer is saved.
+
 #+begin_src emacs-lisp
 
 #+end_src
-** God Mode
+** Rainbow Delimiters
+Colorize parenthesis to ease in finding matching pairs.
+
 #+begin_src emacs-lisp
-(straight-use-package 'god-mode)
-(with-eval-after-load 'god-mode
-  (require 'god-mode)
-  (god-mode)
-  (add-to-list 'god-exempt-predicates 'slip-god-mode-active-minibuffer-p)
-  (add-hook 'post-command-hook 'slip-god-mode-update-cursor-type)
-  (which-key-enable-god-mode-support))
+  (straight-use-package 'rainbow-delimiters)
+
+(add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
 #+end_src
-* Line Numbers
+** General
+Keybinding framework to ease use of Emacs builtins for handing
+keybindings making for better syntax and togetherness.
+
 #+begin_src emacs-lisp
-    (dolist (mode '(org-mode-hook
-                    term-mode-hook
-                    eshell-mode-hook))
-      (add-hook mode (lambda () (display-line-numbers-mode 0))))
-  (global-display-line-numbers-mode 1)
+(straight-use-package 'general)
 #+end_src
-* Keybindings
-Use *general.el* to manage keybindings for every package and globaly
+*** Keybindings
+Use *general.el* to manage keybindings all in one convenient location.
+
 #+begin_src emacs-lisp
 (general-define-key
  "<escape>" #'god-mode-all
@@ -221,6 +227,54 @@ Use *general.el* to manage keybindings for every package and globaly
  "i" 'god-local-mode
  "[" 'backward-paragraph
  "]" 'forward-paragraph)
+#+end_src
+** Vterm
+The best terminal emulation in Emacs that is fully functional and
+compatible with interactive Linux commands.
+
+#+begin_src emacs-lisp
+(straight-use-package 'vterm)
+#+end_src
+** Password Store
+Use password-store to integrate with Linux's pass command.
+
+#+begin_src emacs-lisp
+(straight-use-package
+ '(password-store :type git
+		  :flavor melpa
+		  :files ("contrib/emacs/*.el" "password-store-pkg.el")
+		  :host github
+		  :repo "zx2c4/password-store"))
+#+end_src
+** Nov.el
+Read *epub* books inside Emacs.
+
+#+begin_src emacs-lisp
+(straight-use-package 'nov)
+(add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+#+end_src
+** Diminish
+Permits hiding modes from your modeline for less visual distraction.
+
+#+begin_src emacs-lisp
+(straight-use-package 'diminish)
+#+end_src
+** Company
+Code completion framework for Emacs.
+
+#+begin_src emacs-lisp
+(straight-use-package 'company)
+(require 'company)
+#+end_src
+* Line Numbers
+What programmer does not appreciate line numbers?
+
+#+begin_src emacs-lisp
+    (dolist (mode '(org-mode-hook
+                    term-mode-hook
+                    eshell-mode-hook))
+      (add-hook mode (lambda () (display-line-numbers-mode 0))))
+  (global-display-line-numbers-mode 1)
 #+end_src
 * Slipsnip's Helpful Functions
 #+begin_src emacs-lisp

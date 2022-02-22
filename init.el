@@ -31,29 +31,22 @@
       doom-themes-enable-italic t)
 (load-theme 'doom-one t)
 
-(straight-use-package
- '(password-store :type git
-		  :flavor melpa
-		  :files ("contrib/emacs/*.el" "password-store-pkg.el")
-		  :host github
-		  :repo "zx2c4/password-store"))
-
-(straight-use-package 'rainbow-delimiters)
-
-(add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
+(straight-use-package 'doom-modeline)
 
 (straight-use-package 'all-the-icons)
 (when (display-graphic-p)
-  (require 'all-the-icons))
+  (require 'all-the-icons)
+  (with-eval-after-load 'all-the-icons
+    (straight-use-package 'all-the-icons-dired))
+)
 
-(straight-use-package 'doom-modeline)
-
-(straight-use-package 'magit)
-
-(straight-use-package 'diminish)
-
-(straight-use-package 'company)
-(require 'company)
+(straight-use-package 'god-mode)
+(with-eval-after-load 'god-mode
+  (require 'god-mode)
+  (god-mode)
+  (add-to-list 'god-exempt-predicates 'slip-god-mode-active-minibuffer-p)
+  (add-hook 'post-command-hook 'slip-god-mode-update-cursor-type)
+  (which-key-enable-god-mode-support))
 
 (straight-use-package 'vertico)
 (vertico-mode)
@@ -73,12 +66,7 @@
 (straight-use-package 'which-key)
 (which-key-mode)
 
-(straight-use-package 'vterm)
-
-(straight-use-package 'nov)
-(add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
-
-(straight-use-package 'general)
+(straight-use-package 'magit)
 
 (straight-use-package 'org-superstar)
 (straight-use-package 'org)
@@ -111,19 +99,11 @@
 
 
 
-(straight-use-package 'god-mode)
-(with-eval-after-load 'god-mode
-  (require 'god-mode)
-  (god-mode)
-  (add-to-list 'god-exempt-predicates 'slip-god-mode-active-minibuffer-p)
-  (add-hook 'post-command-hook 'slip-god-mode-update-cursor-type)
-  (which-key-enable-god-mode-support))
+(straight-use-package 'rainbow-delimiters)
 
-(dolist (mode '(org-mode-hook
-                  term-mode-hook
-                  eshell-mode-hook))
-    (add-hook mode (lambda () (display-line-numbers-mode 0))))
-(global-display-line-numbers-mode 1)
+(add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
+
+(straight-use-package 'general)
 
 (general-define-key
  "<escape>" #'god-mode-all
@@ -158,6 +138,29 @@
  "i" 'god-local-mode
  "[" 'backward-paragraph
  "]" 'forward-paragraph)
+
+(straight-use-package 'vterm)
+
+(straight-use-package
+ '(password-store :type git
+		  :flavor melpa
+		  :files ("contrib/emacs/*.el" "password-store-pkg.el")
+		  :host github
+		  :repo "zx2c4/password-store"))
+
+(straight-use-package 'nov)
+(add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+
+(straight-use-package 'diminish)
+
+(straight-use-package 'company)
+(require 'company)
+
+(dolist (mode '(org-mode-hook
+                  term-mode-hook
+                  eshell-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0))))
+(global-display-line-numbers-mode 1)
 
 (defun slip-god-mode-active-minibuffer-p ()
   "Return true if minibuffer is active otherwise nil"
