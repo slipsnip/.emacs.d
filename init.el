@@ -10,6 +10,7 @@
 (set-keyboard-coding-system 'utf-8)
 (setq default-buffer-file-coding-system 'utf-8
       visible-bell t)
+(auto-revert-mode)
 
 (defvar bootstrap-version)
 (let ((bootstrap-file

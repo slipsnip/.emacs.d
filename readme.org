@@ -17,6 +17,7 @@ Settings that should be enabled by default.
   (set-keyboard-coding-system 'utf-8)
   (setq default-buffer-file-coding-system 'utf-8
         visible-bell t)
+  (auto-revert-mode)
 #+end_src
 
 * Packages
