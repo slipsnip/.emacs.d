@@ -55,6 +55,8 @@ Themes that Doom Emacs comes packaged with that look awesome in all modes.
 *** Doom mode line
 Nicer looking and functioning mode line borrowed from Doom emacs.
 
+- show minor mode strings
+
 #+begin_src emacs-lisp
   (straight-use-package 'doom-modeline)
   (with-eval-after-load 'doom-modeline
