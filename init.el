@@ -73,7 +73,11 @@
   (dolist (mode '(prog-mode
                   shell-mode
                   eshell-mode))
-    (add-hook mode corfu-mode)))
+    (add-hook mode corfu-mode))
+  (add-hook 'eshell-mode-hook
+            (lambda ()
+              (setq-local corfu-auto nil)
+              (corfu-mode))))
 
 (straight-use-package 'which-key)
 (which-key-mode)
