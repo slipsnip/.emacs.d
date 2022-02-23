@@ -1,17 +1,3 @@
-(setq inhibit-startup-message t)
-(scroll-bar-mode -1)
-(tool-bar-mode -1)
-(tooltip-mode -1)
-(set-fringe-mode 10)
-(menu-bar-mode -1)
-(prefer-coding-system       'utf-8)
-(set-default-coding-systems 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(setq default-buffer-file-coding-system 'utf-8
-      visible-bell t)
-(auto-revert-mode)
-
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -25,6 +11,86 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 (setq package-enable-at-startup nil)
+
+;; variables
+(setq default-buffer-file-coding-system 'utf-8
+      visible-bell t
+      inhibit-startup-message t
+      use-dialog-box nil
+      global-auto-revert-non-file-buffers t)
+
+;; coding system
+(prefer-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+
+;; modes
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
+(tooltip-mode -1)
+(set-fringe-mode 10)
+(menu-bar-mode -1)
+(global-auto-revert-mode)
+(recentf-mode)
+(savehist-mode)
+(save-place-mode)
+(show-paren-mode)
+
+(setq custom-file (locate-user-emacs-file "custom-vars.el"))
+
+(straight-use-package 'no-littering)
+(with-eval-after-load 'no-littering
+  (require 'no-littering)
+  (require 'recentf)
+  (setq auto-save-file-name-transforms
+        '((".*" ,(no-littering-expand-var-file-name "auto-save/") t))
+        no-littering-etc-directory (expand-file-name "config/" user-emacs-directory)
+        no-littering-var-directory (expand-file-name "data/" user-emacs-directory))
+  (add-to-list 'recentf-exclude no-littering-var-directory)
+  (add-to-list 'recentf-exclude no-littering-etc-directory))
+
+(add-hook 'after-init-hook 'slip-after-init)
+
+(defun slip-god-mode-active-minibuffer-p ()
+  "Return true if minibuffer is active otherwise nil"
+  (if (active-minibuffer-window) t))
+
+(defun slip-copy-line (arg)
+  "Copy lines to the kill ring"
+  (interactive "p")
+  (kill-ring-save (line-beginning-position)
+                  (line-beginning-position (+ 1 arg)))
+  (message "%d line%s copied" arg (if (= 1 arg) "" "s")))
+
+(defun slip-org-babel-tangle-config ()
+  "Automaticaly tangle Config.org when saved"
+  (when (string-equal (buffer-file-name)
+                      (expand-file-name "~/.emacs.d/readme.org"))
+    (let ((org-confirm-babel-evaluate nil))
+      (org-babel-tangle))))
+
+(defun slip-org-mode-setup ()
+  "Run when in org mode"
+  (org-indent-mode)
+  (org-superstar-mode 1)
+  (prettify-symbols-mode)
+  (add-hook 'after-save-hook #'slip-org-babel-tangle-config))
+
+(defun slip-after-init ()
+  "Run after emacs after-init-hook"
+  (doom-modeline-mode)
+  (setq god-global-mode t)
+  (corfu-global-mode t)
+  (require 'vertico)
+  (vertico-mode)
+  (with-eval-after-load 'god-mode
+    (require 'delight)
+    (delight '((god-local-mode " GOD" god-mode))))
+  (load custom-file 'noerror 'nomessage))
+
+(defun slip-god-mode-update-cursor-type ()
+  (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
 
 (straight-use-package 'doom-themes)
 (setq doom-themes-enable-bold nil
@@ -63,8 +129,6 @@
       completion-category-overrides '((file (styles partial-completion))))
 
 (straight-use-package 'consult)
-
-(savehist-mode)
 
 (straight-use-package 'corfu)
 (with-eval-after-load 'corfu
@@ -139,15 +203,16 @@
  "M-s l" 'consult-line)
 
 (general-create-definer slip-custom-def
-  :prefix "C-c")
+  :prefix "M-p")
 
 (slip-custom-def
   "t" '(:ignore t :which-key "toggle")
   "t l" '(display-line-numbers-mode :which-key "line-numbers")
   "t L" '(global-display-line-numbers-mode :which-key "global-line-numbers")
-  "." 'find-file
+  "C-." 'find-file
   "C-l" 'slip-copy-line
-  "f" '(:ignore t :which-key "file"))
+  "f" '(:ignore t :which-key "file")
+  "f r" '(recentf-open-files :which-key "recent"))
 
 (general-define-key
  :keymaps 'god-local-mode-map
@@ -171,49 +236,14 @@
 ;; (straight-use-package 'diminish)
 (straight-use-package 'delight)
 
+(straight-use-package '(free-keys
+                        :type git
+                        :flavor melpa
+                        :host github
+                        :repo "Fuco1/free-keys"))
+
 (dolist (mode '(org-mode-hook
                 term-mode-hook
                 eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 (global-display-line-numbers-mode 1)
-
-(defun slip-god-mode-active-minibuffer-p ()
-  "Return true if minibuffer is active otherwise nil"
-  (if (active-minibuffer-window) t))
-
-(defun slip-copy-line (arg)
-  "Copy lines to the kill ring"
-  (interactive "p")
-  (kill-ring-save (line-beginning-position)
-                  (line-beginning-position (+ 1 arg)))
-  (message "%d line%s copied" arg (if (= 1 arg) "" "s")))
-
-(defun slip-org-babel-tangle-config ()
-  "Automaticaly tangle Config.org when saved"
-  (when (string-equal (buffer-file-name)
-                      (expand-file-name "~/.emacs.d/readme.org"))
-    (let ((org-confirm-babel-evaluate nil))
-      (org-babel-tangle))))
-
-(defun slip-org-mode-setup ()
-  "Run when in org mode"
-  (org-indent-mode)
-  (org-superstar-mode 1)
-  (prettify-symbols-mode)
-  (add-hook 'after-save-hook #'slip-org-babel-tangle-config))
-
-(defun slip-after-init ()
-  "Run after emacs after-init-hook"
-  (doom-modeline-mode)
-  (setq god-global-mode t)
-  (corfu-global-mode t)
-  (require 'vertico)
-  (vertico-mode)
-  (with-eval-after-load 'god-mode
-    (require 'delight)
-    (delight '((god-local-mode " GOD" god-mode)))))
-
-(defun slip-god-mode-update-cursor-type ()
-  (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
-
-(add-hook 'after-init-hook 'slip-after-init)

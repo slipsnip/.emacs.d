@@ -1,30 +1,11 @@
 #+TITLE: Slipsnip's emacs configuration
 #+PROPERTY: header-args:emacs-lisp :tangle ./init.el
 
-* Better defaults
-Settings that should be enabled by default.
+* About Slipmacs
+Custom configuration attempt at a better Emacs experience while trying to maintain keybinds that are closer to vanilla.  Uses God Mode to achieve using default bindings in a way that saves your pinky while God is enabled.
 
-#+begin_src emacs-lisp
-  (setq inhibit-startup-message t)
-  (scroll-bar-mode -1)
-  (tool-bar-mode -1)
-  (tooltip-mode -1)
-  (set-fringe-mode 10)
-  (menu-bar-mode -1)
-  (prefer-coding-system       'utf-8)
-  (set-default-coding-systems 'utf-8)
-  (set-terminal-coding-system 'utf-8)
-  (set-keyboard-coding-system 'utf-8)
-  (setq default-buffer-file-coding-system 'utf-8
-        visible-bell t)
-  (auto-revert-mode)
-#+end_src
-
-* Packages
-*straight.el* for functional next generation package management.
-
-** Straight Use Package bootstrap
-Bootstrap code needed to get *straight.el* up and running.
+* Straight Use Package bootstrap
+Slipmacs uses *straight.el* for packages.  Bootstrap code needed to get up and running.
 
 #+begin_src emacs-lisp
   (defvar bootstrap-version)
@@ -41,6 +22,120 @@ Bootstrap code needed to get *straight.el* up and running.
     (load bootstrap-file nil 'nomessage))
   (setq package-enable-at-startup nil)
 #+end_src
+* Slipmacs Core
+** Core Settings
+Settings that should be enabled by default.
+
+- remember minibuffer history
+- disable scrollbar, menu and tooltips
+- set default coding to utf-8
+- auto revert buffers on external changes
+- auto revert also non file buffers like magit and dired
+- give breathing room to gutter
+- remember last cursor position in file
+
+#+begin_src emacs-lisp
+  ;; variables
+  (setq default-buffer-file-coding-system 'utf-8
+        visible-bell t
+        inhibit-startup-message t
+        use-dialog-box nil
+        global-auto-revert-non-file-buffers t)
+
+  ;; coding system
+  (prefer-coding-system 'utf-8)
+  (set-default-coding-systems 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+
+  ;; modes
+  (scroll-bar-mode -1)
+  (tool-bar-mode -1)
+  (tooltip-mode -1)
+  (set-fringe-mode 10)
+  (menu-bar-mode -1)
+  (global-auto-revert-mode)
+  (recentf-mode)
+  (savehist-mode)
+  (save-place-mode)
+  (show-paren-mode)
+#+end_src
+** Customization UI
+Set customization settings to use seperate file.
+
+- See after init [[*Slipsnip's Helpful Functions][Slipsnip's Helpful Functions]]
+
+#+begin_src emacs-lisp
+  (setq custom-file (locate-user-emacs-file "custom-vars.el"))
+#+end_src
+
+** No Littering!
+Package that fixes the mess Emacs leaves in *user-emacs-directory* by setting path variables and
+changing location of generated files.
+
+#+begin_src emacs-lisp
+  (straight-use-package 'no-littering)
+  (with-eval-after-load 'no-littering
+    (require 'no-littering)
+    (require 'recentf)
+    (setq auto-save-file-name-transforms
+          '((".*" ,(no-littering-expand-var-file-name "auto-save/") t))
+          no-littering-etc-directory (expand-file-name "config/" user-emacs-directory)
+          no-littering-var-directory (expand-file-name "data/" user-emacs-directory))
+    (add-to-list 'recentf-exclude no-littering-var-directory)
+    (add-to-list 'recentf-exclude no-littering-etc-directory))
+#+end_src
+
+** Garbage Collection
+
+
+** After Init Hook
+#+begin_src emacs-lisp
+  (add-hook 'after-init-hook 'slip-after-init)
+#+end_src
+** Slipmacs Functions
+#+begin_src emacs-lisp
+  (defun slip-god-mode-active-minibuffer-p ()
+    "Return true if minibuffer is active otherwise nil"
+    (if (active-minibuffer-window) t))
+
+  (defun slip-copy-line (arg)
+    "Copy lines to the kill ring"
+    (interactive "p")
+    (kill-ring-save (line-beginning-position)
+                    (line-beginning-position (+ 1 arg)))
+    (message "%d line%s copied" arg (if (= 1 arg) "" "s")))
+
+  (defun slip-org-babel-tangle-config ()
+    "Automaticaly tangle Config.org when saved"
+    (when (string-equal (buffer-file-name)
+                        (expand-file-name "~/.emacs.d/readme.org"))
+      (let ((org-confirm-babel-evaluate nil))
+        (org-babel-tangle))))
+
+  (defun slip-org-mode-setup ()
+    "Run when in org mode"
+    (org-indent-mode)
+    (org-superstar-mode 1)
+    (prettify-symbols-mode)
+    (add-hook 'after-save-hook #'slip-org-babel-tangle-config))
+
+  (defun slip-after-init ()
+    "Run after emacs after-init-hook"
+    (doom-modeline-mode)
+    (setq god-global-mode t)
+    (corfu-global-mode t)
+    (require 'vertico)
+    (vertico-mode)
+    (with-eval-after-load 'god-mode
+      (require 'delight)
+      (delight '((god-local-mode " GOD" god-mode))))
+    (load custom-file 'noerror 'nomessage))
+
+  (defun slip-god-mode-update-cursor-type ()
+    (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
+#+end_src
+* Packages
 ** Doom
 *** Themes
 Themes that Doom Emacs comes packaged with that look awesome in all modes.
@@ -100,11 +195,11 @@ retain full compatibility with emacs builtins.
     (marginalia-mode))
 #+end_src
 
-**** Complementary packages
+***** Complementary packages
 Set of curated complementary packages that work well with *Vertico* to
 enrich the completion UI.
 
-***** Orderless
+****** Orderless
 Advanced completion style that matches candidates in any order
 
 #+begin_src emacs-lisp
@@ -113,20 +208,15 @@ Advanced completion style that matches candidates in any order
         completion-category-defaults nil
         completion-category-overrides '((file (styles partial-completion))))
 #+end_src
-***** Consult
+****** Consult
 Consult provides practical commands based on the Emacs completion function *completing-read*.
 
 #+begin_src emacs-lisp
   (straight-use-package 'consult)
+
 #+end_src
 
-Helps to continue where left off especially useful with various consult
-functions
-
-#+begin_src emacs-lisp
-  (savehist-mode)
-#+end_src
-**** Corfu
+***** Corfu
 Enhanced *completion-at-point* ui that is small and plays nicely with completion backends.
 
 - hook into prog-mode, eshell and shell-modes
@@ -234,15 +324,16 @@ Use *general.el* to manage keybindings all in one convenient location.
    "M-s l" 'consult-line)
 
   (general-create-definer slip-custom-def
-    :prefix "C-c")
+    :prefix "M-p")
 
   (slip-custom-def
     "t" '(:ignore t :which-key "toggle")
     "t l" '(display-line-numbers-mode :which-key "line-numbers")
     "t L" '(global-display-line-numbers-mode :which-key "global-line-numbers")
-    "." 'find-file
+    "C-." 'find-file
     "C-l" 'slip-copy-line
-    "f" '(:ignore t :which-key "file"))
+    "f" '(:ignore t :which-key "file")
+    "f r" '(recentf-open-files :which-key "recent"))
 
   (general-define-key
    :keymaps 'god-local-mode-map
@@ -250,6 +341,7 @@ Use *general.el* to manage keybindings all in one convenient location.
    "i" 'god-local-mode
    "[" 'backward-paragraph
    "]" 'forward-paragraph)
+
 #+end_src
 ** Vterm
 The best terminal emulation in Emacs that is fully functional and
@@ -284,7 +376,23 @@ Permits hiding modes from your modeline for less visual distraction.
   (straight-use-package 'delight)
 
 #+end_src
-* Line Numbers
+** Devel Helpers
+Tools to help with development
+
+**** free-keys
+Show free keybindings for current buffer
+
+#+begin_src emacs-lisp
+  (straight-use-package '(free-keys
+                          :type git
+                          :flavor melpa
+                          :host github
+                          :repo "Fuco1/free-keys"))
+#+end_src
+** Packages
+*straight.el* for functional next generation package management.
+
+** Line Numbers
 What programmer does not appreciate line numbers?
 
 #+begin_src emacs-lisp
@@ -293,49 +401,4 @@ What programmer does not appreciate line numbers?
                   eshell-mode-hook))
     (add-hook mode (lambda () (display-line-numbers-mode 0))))
   (global-display-line-numbers-mode 1)
-#+end_src
-* Slipsnip's Helpful Functions
-#+begin_src emacs-lisp
-  (defun slip-god-mode-active-minibuffer-p ()
-    "Return true if minibuffer is active otherwise nil"
-    (if (active-minibuffer-window) t))
-
-  (defun slip-copy-line (arg)
-    "Copy lines to the kill ring"
-    (interactive "p")
-    (kill-ring-save (line-beginning-position)
-                    (line-beginning-position (+ 1 arg)))
-    (message "%d line%s copied" arg (if (= 1 arg) "" "s")))
-
-  (defun slip-org-babel-tangle-config ()
-    "Automaticaly tangle Config.org when saved"
-    (when (string-equal (buffer-file-name)
-                        (expand-file-name "~/.emacs.d/readme.org"))
-      (let ((org-confirm-babel-evaluate nil))
-        (org-babel-tangle))))
-
-  (defun slip-org-mode-setup ()
-    "Run when in org mode"
-    (org-indent-mode)
-    (org-superstar-mode 1)
-    (prettify-symbols-mode)
-    (add-hook 'after-save-hook #'slip-org-babel-tangle-config))
-
-  (defun slip-after-init ()
-    "Run after emacs after-init-hook"
-    (doom-modeline-mode)
-    (setq god-global-mode t)
-    (corfu-global-mode t)
-    (require 'vertico)
-    (vertico-mode)
-    (with-eval-after-load 'god-mode
-      (require 'delight)
-      (delight '((god-local-mode " GOD" god-mode)))))
-
-  (defun slip-god-mode-update-cursor-type ()
-    (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
-#+end_src
-* After Init Hook
-#+begin_src emacs-lisp
-  (add-hook 'after-init-hook 'slip-after-init)
 #+end_src
