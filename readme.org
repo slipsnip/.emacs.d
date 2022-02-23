@@ -39,7 +39,6 @@ Bootstrap code needed to get *straight.el* up and running.
         (goto-char (point-max))
         (eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage))
-
   (setq package-enable-at-startup nil)
 #+end_src
 ** Doom
@@ -94,8 +93,9 @@ retain full compatibility with emacs builtins.
 
 #+begin_src emacs-lisp
   (straight-use-package 'vertico)
-  (vertico-mode)
+
   (with-eval-after-load 'vertico
+
     (straight-use-package 'marginalia)
     (marginalia-mode))
 #+end_src
@@ -125,6 +125,22 @@ functions
 
 #+begin_src emacs-lisp
   (savehist-mode)
+#+end_src
+**** Corfu
+Enhanced *completion-at-point* ui that is small and plays nicely with completion backends.
+
+- hook into prog-mode, eshell and shell-modes
+- enable timer based auto-completions
+
+#+begin_src emacs-lisp
+    (straight-use-package 'corfu)
+    (with-eval-after-load 'corfu
+      (require 'corfu)
+      (setq corfu-auto t)
+      (dolist (mode '(prog-mode
+                      shell-mode
+                      eshell-mode))
+        (add-hook mode corfu-mode)))
 #+end_src
 ** Which Key
 The very helpful which key verbosely reminding you of keybindings
@@ -201,7 +217,10 @@ Use *general.el* to manage keybindings all in one convenient location.
    "C-x C-1" 'delete-other-windows
    "C-x C-2" 'split-window-below
    "C-x C-3" 'split-window-right
-   "C-x C-0" 'delete-window)
+   "C-x C-0" 'delete-window
+   "M-/" 'dabbrev-completion
+   "C-M-/" 'dabbrev-expand
+   )
 
   (general-define-key
    :keymaps 'isearch-mode-map
@@ -260,13 +279,6 @@ Permits hiding modes from your modeline for less visual distraction.
   (straight-use-package 'delight)
 
 #+end_src
-** Company
-Code completion framework for Emacs.
-
-#+begin_src emacs-lisp
-  (straight-use-package 'company)
-  (require 'company)
-#+end_src
 * Line Numbers
 What programmer does not appreciate line numbers?
 
@@ -306,9 +318,11 @@ What programmer does not appreciate line numbers?
 
   (defun slip-after-init ()
     "Run after emacs after-init-hook"
-    (global-company-mode)
     (doom-modeline-mode)
     (setq god-global-mode t)
+    (corfu-global-mode t)
+    (require 'vertico)
+    (vertico-mode)
     (with-eval-after-load 'god-mode
       (require 'delight)
       (delight '((god-local-mode " GOD" god-mode)))))

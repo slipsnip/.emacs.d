@@ -24,7 +24,6 @@
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
-
 (setq package-enable-at-startup nil)
 
 (straight-use-package 'doom-themes)
@@ -52,8 +51,9 @@
   (which-key-enable-god-mode-support))
 
 (straight-use-package 'vertico)
-(vertico-mode)
+
 (with-eval-after-load 'vertico
+
   (straight-use-package 'marginalia)
   (marginalia-mode))
 
@@ -65,6 +65,15 @@
 (straight-use-package 'consult)
 
 (savehist-mode)
+
+(straight-use-package 'corfu)
+(with-eval-after-load 'corfu
+  (require 'corfu)
+  (setq corfu-auto t)
+  (dolist (mode '(prog-mode
+                  shell-mode
+                  eshell-mode))
+    (add-hook mode corfu-mode)))
 
 (straight-use-package 'which-key)
 (which-key-mode)
@@ -114,7 +123,10 @@
  "C-x C-1" 'delete-other-windows
  "C-x C-2" 'split-window-below
  "C-x C-3" 'split-window-right
- "C-x C-0" 'delete-window)
+ "C-x C-0" 'delete-window
+ "M-/" 'dabbrev-completion
+ "C-M-/" 'dabbrev-expand
+ )
 
 (general-define-key
  :keymaps 'isearch-mode-map
@@ -155,9 +167,6 @@
 ;; (straight-use-package 'diminish)
 (straight-use-package 'delight)
 
-(straight-use-package 'company)
-(require 'company)
-
 (dolist (mode '(org-mode-hook
                 term-mode-hook
                 eshell-mode-hook))
@@ -191,9 +200,11 @@
 
 (defun slip-after-init ()
   "Run after emacs after-init-hook"
-  (global-company-mode)
   (doom-modeline-mode)
   (setq god-global-mode t)
+  (corfu-global-mode t)
+  (require 'vertico)
+  (vertico-mode)
   (with-eval-after-load 'god-mode
     (require 'delight)
     (delight '((god-local-mode " GOD" god-mode)))))
