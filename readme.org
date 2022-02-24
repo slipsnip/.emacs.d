@@ -159,6 +159,8 @@ Set 95 % transparency for active and inactive Emacs frame
   (add-hook 'after-init-hook 'slip-after-init)
 #+end_src
 * Packages
+*straight.el* for functional next generation package management.
+
 ** Doom
 *** Themes
 Themes that Doom Emacs comes packaged with that look awesome in all modes.
@@ -412,9 +414,6 @@ Show free keybindings for current buffer
                           :host github
                           :repo "Fuco1/free-keys"))
 #+end_src
-** Packages
-*straight.el* for functional next generation package management.
-
 ** Line Numbers
 What programmer does not appreciate line numbers?
 
