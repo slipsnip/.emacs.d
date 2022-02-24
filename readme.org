@@ -33,33 +33,36 @@ Settings that should be enabled by default.
 - auto revert also non file buffers like magit and dired
 - give breathing room to gutter
 - remember last cursor position in file
-- set customization settings to use seperate file.
+- set customization settings to use seperate file
+- don't double process auto-mode-alist
+
 #+begin_src emacs-lisp
-    ;; variables
-    (setq default-buffer-file-coding-system 'utf-8
-          visible-bell t
-          inhibit-startup-message t
-          use-dialog-box nil
-          global-auto-revert-non-file-buffers t
-          custom-file (locate-user-emacs-file "custom-vars.el"))
+  ;; variables
+  (setq default-buffer-file-coding-system 'utf-8
+        visible-bell t
+        inhibit-startup-message t
+        use-dialog-box nil
+        global-auto-revert-non-file-buffers t
+        custom-file (locate-user-emacs-file "custom-vars.el")
+        auto-mode-case-fold nil)
 
-    ;; coding system
-    (prefer-coding-system 'utf-8)
-    (set-default-coding-systems 'utf-8)
-    (set-terminal-coding-system 'utf-8)
-    (set-keyboard-coding-system 'utf-8)
+  ;; coding system
+  (prefer-coding-system 'utf-8)
+  (set-default-coding-systems 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
 
-    ;; modes
-    (scroll-bar-mode -1)
-    (tool-bar-mode -1)
-    (tooltip-mode -1)
-    (set-fringe-mode 10)
-    (menu-bar-mode -1)
-    (global-auto-revert-mode)
-    (recentf-mode)
-    (savehist-mode)
-    (save-place-mode)
-    (show-paren-mode)
+  ;; modes
+  (scroll-bar-mode -1)
+  (tool-bar-mode -1)
+  (tooltip-mode -1)
+  (set-fringe-mode 10)
+  (menu-bar-mode -1)
+  (global-auto-revert-mode)
+  (recentf-mode)
+  (savehist-mode)
+  (save-place-mode)
+  (show-paren-mode)
 #+end_src
 ** No Littering!
 Package that fixes the mess Emacs leaves in *user-emacs-directory* by setting path variables and
