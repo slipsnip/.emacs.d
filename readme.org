@@ -64,9 +64,12 @@ Settings that should be enabled by default.
 Set customization settings to use seperate file.
 
 - See after init [[*Slipsnip's Helpful Functions][Slipsnip's Helpful Functions]]
+** Transparency
+Set 95 % transparency for active and inactive Emacs frame
 
 #+begin_src emacs-lisp
-  (setq custom-file (locate-user-emacs-file "custom-vars.el"))
+   (set-frame-parameter (selected-frame) 'alpha '(95 . 95))
+   (add-to-list 'default-frame-alist '(alpha . '(95 . 95)))
 #+end_src
 
 ** No Littering!
