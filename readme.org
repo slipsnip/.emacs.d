@@ -90,6 +90,8 @@ Use *GCMH - the Garbage Collector Magic Hack* to intelegently deal with managing
     (gcmh-mode 1))
 #+end_src
 
+** User Interface Settings
+Some cosmetic changes to make things more beautiful
 
 ** Transparency
 Set 95 % transparency for active and inactive Emacs frame
