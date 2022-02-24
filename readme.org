@@ -4,6 +4,8 @@
 * About Slipmacs
 Custom configuration attempt at a better Emacs experience while trying to maintain keybinds that are closer to vanilla.  Uses God Mode to achieve using default bindings in a way that saves your pinky while God is enabled.
 
+This configuration of Emacs is a work in progress and not ready for mainstream use.  Private for now.
+
 * Straight Use Package bootstrap
 Slipmacs uses *straight.el* for packages.  Bootstrap code needed to get up and running.
 
