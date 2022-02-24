@@ -18,7 +18,8 @@
       inhibit-startup-message t
       use-dialog-box nil
       global-auto-revert-non-file-buffers t
-      custom-file (locate-user-emacs-file "custom-vars.el"))
+      custom-file (locate-user-emacs-file "custom-vars.el")
+      auto-mode-case-fold nil)
 
 ;; coding system
 (prefer-coding-system 'utf-8)
@@ -52,6 +53,11 @@
 (straight-use-package 'gcmh)
 (with-eval-after-load 'gcmh
   (gcmh-mode 1))
+
+(setq window-divider-default-places t
+      window-divider-default-bottom-width 2
+      window-divider-default-right-width 2)
+(add-hook 'window-setup-hook #'window-divider-mode)
 
 (set-frame-parameter (selected-frame) 'alpha '(95 . 95))
 (add-to-list 'default-frame-alist '(alpha . (95 . 95)))
