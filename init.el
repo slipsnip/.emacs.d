@@ -17,7 +17,8 @@
       visible-bell t
       inhibit-startup-message t
       use-dialog-box nil
-      global-auto-revert-non-file-buffers t)
+      global-auto-revert-non-file-buffers t
+      custom-file (locate-user-emacs-file "custom-vars.el"))
 
 ;; coding system
 (prefer-coding-system 'utf-8)
@@ -37,7 +38,8 @@
 (save-place-mode)
 (show-paren-mode)
 
-(setq custom-file (locate-user-emacs-file "custom-vars.el"))
+(set-frame-parameter (selected-frame) 'alpha '(95 . 95))
+(add-to-list 'default-frame-alist '(alpha . '(95 . 95)))
 
 (straight-use-package 'no-littering)
 (with-eval-after-load 'no-littering

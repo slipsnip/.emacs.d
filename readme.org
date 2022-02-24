@@ -23,7 +23,7 @@ Slipmacs uses *straight.el* for packages.  Bootstrap code needed to get up and r
   (setq package-enable-at-startup nil)
 #+end_src
 * Slipmacs Core
-** Core Settings
+** Defaults
 Settings that should be enabled by default.
 
 - remember minibuffer history
@@ -33,37 +33,34 @@ Settings that should be enabled by default.
 - auto revert also non file buffers like magit and dired
 - give breathing room to gutter
 - remember last cursor position in file
-
+- set customization settings to use seperate file.
 #+begin_src emacs-lisp
-  ;; variables
-  (setq default-buffer-file-coding-system 'utf-8
-        visible-bell t
-        inhibit-startup-message t
-        use-dialog-box nil
-        global-auto-revert-non-file-buffers t)
+    ;; variables
+    (setq default-buffer-file-coding-system 'utf-8
+          visible-bell t
+          inhibit-startup-message t
+          use-dialog-box nil
+          global-auto-revert-non-file-buffers t
+          custom-file (locate-user-emacs-file "custom-vars.el"))
 
-  ;; coding system
-  (prefer-coding-system 'utf-8)
-  (set-default-coding-systems 'utf-8)
-  (set-terminal-coding-system 'utf-8)
-  (set-keyboard-coding-system 'utf-8)
+    ;; coding system
+    (prefer-coding-system 'utf-8)
+    (set-default-coding-systems 'utf-8)
+    (set-terminal-coding-system 'utf-8)
+    (set-keyboard-coding-system 'utf-8)
 
-  ;; modes
-  (scroll-bar-mode -1)
-  (tool-bar-mode -1)
-  (tooltip-mode -1)
-  (set-fringe-mode 10)
-  (menu-bar-mode -1)
-  (global-auto-revert-mode)
-  (recentf-mode)
-  (savehist-mode)
-  (save-place-mode)
-  (show-paren-mode)
+    ;; modes
+    (scroll-bar-mode -1)
+    (tool-bar-mode -1)
+    (tooltip-mode -1)
+    (set-fringe-mode 10)
+    (menu-bar-mode -1)
+    (global-auto-revert-mode)
+    (recentf-mode)
+    (savehist-mode)
+    (save-place-mode)
+    (show-paren-mode)
 #+end_src
-** Customization UI
-Set customization settings to use seperate file.
-
-- See after init [[*Slipsnip's Helpful Functions][Slipsnip's Helpful Functions]]
 ** Transparency
 Set 95 % transparency for active and inactive Emacs frame
 
