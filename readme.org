@@ -79,14 +79,23 @@ changing location of generated files.
 #+end_src
 
 ** Garbage Collection
+Use *GCMH - the Garbage Collector Magic Hack* to intelegently deal with managing garbage collection.
 
-
-** After Init Hook
 #+begin_src emacs-lisp
-  (add-hook 'after-init-hook 'slip-after-init)
+  (straight-use-package 'gcmh)
+  (with-eval-after-load 'gcmh
+    (gcmh-mode 1))
+#+end_src
+
+
+** Transparency
+Set 95 % transparency for active and inactive Emacs frame
+
+#+begin_src emacs-lisp
    (set-frame-parameter (selected-frame) 'alpha '(95 . 95))
    (add-to-list 'default-frame-alist '(alpha . (95 . 95)))
 #+end_src
+
 ** Slipmacs Functions
 #+begin_src emacs-lisp
   (defun slip-god-mode-active-minibuffer-p ()
@@ -128,6 +137,10 @@ changing location of generated files.
 
   (defun slip-god-mode-update-cursor-type ()
     (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
+#+end_src
+** After Init Hook
+#+begin_src emacs-lisp
+  (add-hook 'after-init-hook 'slip-after-init)
 #+end_src
 * Packages
 ** Doom
