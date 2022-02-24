@@ -38,9 +38,6 @@
 (save-place-mode)
 (show-paren-mode)
 
-(set-frame-parameter (selected-frame) 'alpha '(95 . 95))
-(add-to-list 'default-frame-alist '(alpha . '(95 . 95)))
-
 (straight-use-package 'no-littering)
 (with-eval-after-load 'no-littering
   (require 'no-littering)
@@ -52,7 +49,12 @@
   (add-to-list 'recentf-exclude no-littering-var-directory)
   (add-to-list 'recentf-exclude no-littering-etc-directory))
 
-(add-hook 'after-init-hook 'slip-after-init)
+(straight-use-package 'gcmh)
+(with-eval-after-load 'gcmh
+  (gcmh-mode 1))
+
+(set-frame-parameter (selected-frame) 'alpha '(95 . 95))
+(add-to-list 'default-frame-alist '(alpha . (95 . 95)))
 
 (defun slip-god-mode-active-minibuffer-p ()
   "Return true if minibuffer is active otherwise nil"
@@ -93,6 +95,8 @@
 
 (defun slip-god-mode-update-cursor-type ()
   (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
+
+(add-hook 'after-init-hook 'slip-after-init)
 
 (straight-use-package 'doom-themes)
 (setq doom-themes-enable-bold nil
