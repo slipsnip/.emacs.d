@@ -93,7 +93,16 @@ Use *GCMH - the Garbage Collector Magic Hack* to intelegently deal with managing
 ** User Interface Settings
 Some cosmetic changes to make things more beautiful
 
-** Transparency
+*** Window borders
+More visibility on window borders
+
+#+begin_src emacs-lisp
+  (setq window-divider-default-places t
+        window-divider-default-bottom-width 2
+        window-divider-default-right-width 2)
+  (add-hook 'window-setup-hook #'window-divider-mode)
+#+end_src
+*** Transparency
 Set 95 % transparency for active and inactive Emacs frame
 
 #+begin_src emacs-lisp
