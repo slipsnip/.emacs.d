@@ -61,14 +61,6 @@ Settings that should be enabled by default.
     (save-place-mode)
     (show-paren-mode)
 #+end_src
-** Transparency
-Set 95 % transparency for active and inactive Emacs frame
-
-#+begin_src emacs-lisp
-   (set-frame-parameter (selected-frame) 'alpha '(95 . 95))
-   (add-to-list 'default-frame-alist '(alpha . '(95 . 95)))
-#+end_src
-
 ** No Littering!
 Package that fixes the mess Emacs leaves in *user-emacs-directory* by setting path variables and
 changing location of generated files.
@@ -92,6 +84,8 @@ changing location of generated files.
 ** After Init Hook
 #+begin_src emacs-lisp
   (add-hook 'after-init-hook 'slip-after-init)
+   (set-frame-parameter (selected-frame) 'alpha '(95 . 95))
+   (add-to-list 'default-frame-alist '(alpha . (95 . 95)))
 #+end_src
 ** Slipmacs Functions
 #+begin_src emacs-lisp
