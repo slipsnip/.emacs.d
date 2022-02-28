@@ -1,3 +1,4 @@
+;; straight use package
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -39,6 +40,7 @@
 (save-place-mode)
 (show-paren-mode)
 
+;; keep things clean - no litttering
 (straight-use-package 'no-littering)
 (with-eval-after-load 'no-littering
   (require 'no-littering)
@@ -50,18 +52,22 @@
   (add-to-list 'recentf-exclude no-littering-var-directory)
   (add-to-list 'recentf-exclude no-littering-etc-directory))
 
+;; garbage collection magic
 (straight-use-package 'gcmh)
 (with-eval-after-load 'gcmh
   (gcmh-mode 1))
 
+;; better visibility of window borders
 (setq window-divider-default-places t
       window-divider-default-bottom-width 2
       window-divider-default-right-width 2)
 (add-hook 'window-setup-hook #'window-divider-mode)
 
+;; transparency
 (set-frame-parameter (selected-frame) 'alpha '(95 . 95))
 (add-to-list 'default-frame-alist '(alpha . (95 . 95)))
 
+;; helpful functions
 (defun slip-god-mode-active-minibuffer-p ()
   "Return true if minibuffer is active otherwise nil"
   (if (active-minibuffer-window) t))
@@ -104,15 +110,18 @@
 
 (add-hook 'after-init-hook 'slip-after-init)
 
+;; themes
 (straight-use-package 'doom-themes)
 (setq doom-themes-enable-bold nil
       doom-themes-enable-italic t)
 (load-theme 'doom-one t)
 
+;; modeline
 (straight-use-package 'doom-modeline)
 (with-eval-after-load 'doom-modeline
   (setq doom-modeline-minor-modes t))
 
+;; icon fonts
 (straight-use-package 'all-the-icons)
 (when (display-graphic-p)
   (require 'all-the-icons)
@@ -120,6 +129,7 @@
     (straight-use-package 'all-the-icons-dired))
   )
 
+;; god mode - rsi
 (straight-use-package 'god-mode)
 (with-eval-after-load 'god-mode
   (require 'god-mode)
@@ -128,6 +138,7 @@
   (add-hook 'post-command-hook 'slip-god-mode-update-cursor-type)
   (which-key-enable-god-mode-support))
 
+;; better vertical completions - integrates with emacs
 (straight-use-package 'vertico)
 
 (with-eval-after-load 'vertico
@@ -135,13 +146,16 @@
   (straight-use-package 'marginalia)
   (marginalia-mode))
 
+;; completion style - out of order completion
 (straight-use-package 'orderless)
 (setq completion-styles '(orderless)
       completion-category-defaults nil
       completion-category-overrides '((file (styles partial-completion))))
 
+;; helpful function replacements work with vertico
 (straight-use-package 'consult)
 
+;; autocomplete ui dropdown that stays out of way
 (straight-use-package 'corfu)
 (with-eval-after-load 'corfu
   (require 'corfu)
@@ -155,11 +169,14 @@
               (setq-local corfu-auto nil)
               (corfu-mode))))
 
+;; verbose key bindings - discover-ability
 (straight-use-package 'which-key)
 (which-key-mode)
 
+;; Magit
 (straight-use-package 'magit)
 
+;; Org mode
 (straight-use-package 'org-superstar)
 (straight-use-package 'org)
 (with-eval-after-load 'org
