@@ -77,6 +77,12 @@
 (set-frame-parameter (selected-frame) 'alpha '(95 . 95))
 (add-to-list 'default-frame-alist '(alpha . (95 . 95)))
 
+(straight-use-package 'exec-path-from-shell)
+(require 'exec-path-from-shell)
+(exec-path-from-shell-copy-env "SSH_AGENT_PID")
+(exec-path-from-shell-copy-env "SSH_AUTH_SOCK")
+(exec-path-from-shell-copy-env "GPG_TTY")
+
 ;; helpful functions
 (defun slip-copy-line (arg)
   "Copy lines to the kill ring"
