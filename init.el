@@ -68,10 +68,6 @@
 (add-to-list 'default-frame-alist '(alpha . (95 . 95)))
 
 ;; helpful functions
-(defun slip-god-mode-active-minibuffer-p ()
-  "Return true if minibuffer is active otherwise nil"
-  (if (active-minibuffer-window) t))
-
 (defun slip-copy-line (arg)
   "Copy lines to the kill ring"
   (interactive "p")
@@ -96,17 +92,10 @@
 (defun slip-after-init ()
   "Run after emacs after-init-hook"
   (doom-modeline-mode)
-  (setq god-global-mode t)
   (corfu-global-mode t)
   (require 'vertico)
   (vertico-mode)
-  (with-eval-after-load 'god-mode
-    (require 'delight)
-    (delight '((god-local-mode " GOD" god-mode))))
   (load custom-file 'noerror 'nomessage))
-
-(defun slip-god-mode-update-cursor-type ()
-  (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
 
 (add-hook 'after-init-hook 'slip-after-init)
 
@@ -128,15 +117,6 @@
   (with-eval-after-load 'all-the-icons
     (straight-use-package 'all-the-icons-dired))
   )
-
-;; god mode - rsi
-(straight-use-package 'god-mode)
-(with-eval-after-load 'god-mode
-  (require 'god-mode)
-  (god-mode)
-  (add-to-list 'god-exempt-predicates 'slip-god-mode-active-minibuffer-p)
-  (add-hook 'post-command-hook 'slip-god-mode-update-cursor-type)
-  (which-key-enable-god-mode-support))
 
 ;; better vertical completions - integrates with emacs
 (straight-use-package 'vertico)
@@ -213,7 +193,6 @@
 (straight-use-package 'general)
 
 (general-define-key
- "<escape>" #'god-mode-all
  "C-;" 'execute-extended-command
  "C-x b" 'consult-buffer
  "C-s" 'consult-line
@@ -242,13 +221,6 @@
   "C-l" 'slip-copy-line
   "f" '(:ignore t :which-key "file")
   "f r" '(recentf-open-files :which-key "recent"))
-
-(general-define-key
- :keymaps 'god-local-mode-map
- "." 'repeat
- "i" 'god-local-mode
- "[" 'backward-paragraph
- "]" 'forward-paragraph)
 
 (straight-use-package 'vterm)
 
