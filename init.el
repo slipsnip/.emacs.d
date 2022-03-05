@@ -40,6 +40,16 @@
 (save-place-mode)
 (show-paren-mode)
 
+;; (straight-use-package 'exwm)
+
+
+;; font
+(straight-use-package 'fira-code-mode)
+(with-eval-after-load 'fira-code-mode
+  (add-hook 'prog-mode (lambda () (global-fira-code-mode)))
+  (add-hook 'emacs-lisp-mode-hook (lambda () (global-fira-code-mode))))
+(set-face-attribute 'default nil :font "Fira Code Retina")
+
 ;; keep things clean - no litttering
 (straight-use-package 'no-littering)
 (with-eval-after-load 'no-littering
